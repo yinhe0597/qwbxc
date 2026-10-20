@@ -11,11 +11,12 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LEX = os.path.join(ROOT, "data", "lexicon.json")
 REF_DIR = os.path.join(ROOT, "skills", "qwbxc-caibian-kanwu", "references")
 
-TYPE_ORDER = ["错别字", "成语", "用字", "专名", "表述", "政治表述", "机构名称", "职务",
+TYPE_ORDER = ["错别字", "成语", "用字", "专名", "读音", "表述", "政治表述", "机构名称", "职务",
               "标点", "数字", "计量", "新闻业务", "规范用语"]
 
 FILE_MAP = OrderedDict([
     ("错别字对照表.md", ["错别字", "成语", "用字", "专名"]),
+    ("读音与易错字音.md", ["读音"]),
     ("政治与提法表述.md", ["政治表述", "表述"]),
     ("机构名称与职务.md", ["机构名称", "职务"]),
     ("标点与数字规范.md", ["标点", "数字", "计量"]),

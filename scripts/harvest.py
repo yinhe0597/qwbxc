@@ -17,6 +17,7 @@
     python scripts/harvest.py            # 全通道尝试
     python scripts/harvest.py --probe    # 只探活，不落库
 """
+import html as htmllib
 import http.cookiejar
 import json
 import os
@@ -42,7 +43,18 @@ QUERIES = [
     TARGET + " 公文", TARGET + " 标点", TARGET + " 领导人", TARGET + " 机构名称",
     TARGET + " 编辑", TARGET + " 校对", TARGET + " 稿件", TARGET + " 表述",
     TARGET + " 新闻", TARGET + " 提法", TARGET + " 职务", TARGET + " 会议",
+    # 第二轮扩充：按该号栏目化的选题词捞历史文章
+    TARGET + " 汇总", TARGET + " 错误表述", TARGET + " 政府工作报告",
+    TARGET + " 十五五", TARGET + " 两会", TARGET + " 学习教育",
+    TARGET + " 常委会", TARGET + " 任免", TARGET + " 通报", TARGET + " 一图读懂",
+    TARGET + " 宣传", TARGET + " 通稿", TARGET + " 规范用语", TARGET + " 发文字号",
 ]
+
+# 标题尾部营销套话，入库时剥离，保留原题在 title_raw
+TITLE_TAIL = re.compile(
+    r"[！!，,]?\s*赶快(学习一下|关注|收藏|转发学习|转发|学起来|收藏学习)[，,]?\s*(千万别写错)?\s*$")
+TITLE_TAIL2 = re.compile(r"\s*[！!]?\s*千万别写错\s*[！!]?\s*$")
+
 
 
 def now():
@@ -59,10 +71,21 @@ def log(rec):
 def strip_tags(s):
     s = re.sub(r"<!--.*?-->", "", s, flags=re.S)
     s = re.sub(r"<[^>]+>", "", s)
-    for a, b in (("&amp;", "&"), ("&quot;", '"'), ("&lt;", "<"),
-                 ("&gt;", ">"), ("&nbsp;", " "), ("&#39;", "'")):
-        s = s.replace(a, b)
+    s = htmllib.unescape(s)          # 关键：&ldquo; &rdquo; &mdash; 等实体化中文引号
     return re.sub(r"\s+", " ", s).strip()
+
+
+def clean_title(t):
+    """剥离标题尾部“赶快学习一下，千万别写错”套话。"""
+    x = TITLE_TAIL.sub("", t)
+    x = TITLE_TAIL2.sub("", x)
+    return (x or t).strip(" ，,！!：:")
+
+
+def key_of(title):
+    """去重键：只留汉字与数字，避免标点差异导致重复入库。"""
+    return re.sub(r"[^\u4e00-\u9fa5A-Za-z0-9]", "", title or "")
+
 
 
 def make_opener():
@@ -118,7 +141,8 @@ def parse_articles(html):
         date = time.strftime("%Y-%m-%d", time.localtime(int(ts.group(1)))) if ts else ""
         summ = re.search(r'class="txt-info"[^>]*>(.*?)</p>', blk, re.S)
         summ = strip_tags(summ.group(1)) if summ else ""
-        items.append({"account": acc, "title": title, "date": date, "summary": summ,
+        items.append({"account": acc, "title": title, "title_clean": clean_title(title),
+                      "date": date, "summary": summ,
                       "sogou_link": "https://weixin.sogou.com" + link.replace("&amp;", "&"),
                       "url": "", "collected": now()})
     return items
@@ -129,7 +153,13 @@ def load_existing():
         try:
             with open(OUT, encoding="utf-8") as f:
                 d = json.load(f)
-            return d if isinstance(d, dict) else {"meta": {}, "articles": d}
+            store = d if isinstance(d, dict) else {"meta": {}, "articles": d}
+            # 历史数据里的 &ldquo; 类实体，读入时一并清洗
+            for a in store.get("articles", []):
+                a["title"] = strip_tags(a.get("title", ""))
+                a["summary"] = strip_tags(a.get("summary", ""))
+                a["title_clean"] = clean_title(a["title"])
+            return store
         except Exception:
             pass
     return {"meta": {}, "articles": []}
@@ -137,8 +167,17 @@ def load_existing():
 
 def save(store):
     arts = store["articles"]
-    arts.sort(key=lambda x: (x.get("date") or "", x.get("title") or ""), reverse=True)
-    store["meta"].update({"account": TARGET, "wechat_id": BIZ, "count": len(arts),
+    # 同标题去重（保留最早采集到的那条，避免重复计数）
+    seen, uniq = set(), []
+    for a in arts:
+        k = key_of(a.get("title_clean") or a.get("title"))
+        if k in seen:
+            continue
+        seen.add(k)
+        uniq.append(a)
+    store["articles"] = uniq
+    uniq.sort(key=lambda x: (x.get("date") or "", x.get("title_clean") or ""), reverse=True)
+    store["meta"].update({"account": TARGET, "wechat_id": BIZ, "count": len(uniq),
                           "updated": now()})
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump(store, f, ensure_ascii=False, indent=2)
@@ -146,11 +185,17 @@ def save(store):
 
 def main():
     probe = "--probe" in sys.argv
+    only_extra = "--extra" in sys.argv          # 只跑第二轮扩充词
     op = make_opener()
     store = load_existing()
-    known = {a["title"] for a in store["articles"]}
+    known = {key_of(a.get("title_clean") or a.get("title")) for a in store["articles"]}
     added = 0
     channel_ok = {}
+    queries = QUERIES[16:] if only_extra else QUERIES
+    for i, a in enumerate(sys.argv):            # --from N：验证码中断后从第 N 个检索词续跑
+        if a == "--from" and i + 1 < len(sys.argv):
+            queries = QUERIES[int(sys.argv[i + 1]):]
+
 
     # --- 通道1: 账号检索 ---
     accs = []
@@ -173,7 +218,7 @@ def main():
         print("[account]", a)
 
     # --- 通道2: 文章检索 ---
-    for q in QUERIES:
+    for q in queries:
         for page in (1, 2, 3):
             url = ("https://weixin.sogou.com/weixin?type=2&query=%s&page=%d"
                    % (urllib.parse.quote(q), page))
@@ -185,10 +230,10 @@ def main():
             items = parse_articles(html)
             hit = 0
             for it in items:
-                if TARGET in (it["account"] or "") and it["title"] not in known:
+                if TARGET in (it["account"] or "") and key_of(it["title_clean"]) not in known:
                     it["query"] = q
                     store["articles"].append(it)
-                    known.add(it["title"])
+                    known.add(key_of(it["title_clean"]))
                     hit += 1
                     added += 1
             log({"channel": "sogou_article", "query": q, "page": page, "ok": True,
