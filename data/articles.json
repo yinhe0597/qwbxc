@@ -1,0 +1,18 @@
+{
+  "meta": {
+    "account": "千万别写错",
+    "wechat_id": "qwbxc123",
+    "region": "江苏",
+    "positioning": "采编人员培训（规范表述、勘误、编校差错）",
+    "count": 0,
+    "updated": "2026-10-20 11:05:00",
+    "status": "未采集到公开文章",
+    "reason": "搜狗微信已对本机 IP 要求验证码；账号检索返回“暂无相关的官方认证订阅号”；无 __biz 参数无法访问 profile_ext 历史列表。详见 data/采集说明.md",
+    "channels": {
+      "sogou_account": "无结果",
+      "sogou_article": "CAPTCHA",
+      "profile_ext": "缺 __biz，不可用"
+    }
+  },
+  "articles": []
+}

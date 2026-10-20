@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# 编辑器
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# 采集临时文件
+data/*.html
+data/collect_log.jsonl
+!data/articles.json
+
+# WorkBuddy
+.workbuddy/
