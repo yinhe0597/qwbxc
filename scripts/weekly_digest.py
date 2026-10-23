@@ -74,11 +74,20 @@ def main():
     buf.append("| 提炼 | 每条最多 5 点，格式“误 → 正 → 一句话依据” |\n")
     buf.append("| 入库 | 追加 `data/lexicon.json`，`build_references.py` 重建对照表 |\n")
     buf.append("| 复核 | 政治提法、机构职务、法规名称回到官方原文核一次 |\n\n")
+    lines = [
+        "- **采集**：验证码会中断且 IP 有冷却期，下轮先用 `--probe` 探活再 `--from N` 续跑，"
+        "不要在冷却期内把配额打空；\n",
+        "- **正文与 `__biz` 仍缺**：目标号只能拿到标题与摘要，需任意一篇原文链接或手动导出的历史清单；\n",
+        "- **通报节奏**：三季度通报已近尾声，四季度通报自 12 月起陆续发布，重点看共性问题是否出现新类型；\n",
+        "- **年度差错**：《咬文嚼字》年度十大语文差错通常 12 月发布，提前预留表格"
+        "（2025 年度榜单已在本轮回溯补录完毕）；\n",
+        "- **待补选题**：省级机构旧称、江苏市县地名易错点；\n",
+        "- **工具待办**：`check_text.py` 加 `--check-locality` 属地要素自检开关。\n",
+    ]
     buf.append("## 四、下周关注\n\n")
-    buf.append("- 目标号 10 月新发文章的正文（列表页只能拿标题与摘要，正文需在微信端查看）；\n")
-    buf.append("- 各地政务新媒体三季度检查通报的**共性问题**是否出现新类型；\n")
-    buf.append("- 年末临近，《咬文嚼字》年度十大语文差错通常 12 月发布，提前预留表格；\n")
-    buf.append("- 机构改革后旧称残留（本轮已收 5 条，下一轮补省级机构）。\n")
+    buf.extend(lines)
+    buf.append("\n> 本周完整的版本说明见 `reports/%s-v%s.md`。\n"
+               % (day.isoformat(), meta.get("version", "")))
 
     os.makedirs(REP, exist_ok=True)
     out = os.path.join(REP, "weekly-%s.md" % day.isoformat())

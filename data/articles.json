@@ -4,19 +4,28 @@
     "wechat_id": "qwbxc123",
     "region": "江苏",
     "positioning": "采编人员培训（规范表述、勘误、编校差错）",
-    "count": 16,
-    "updated": "2026-10-20 11:15:48",
-    "status": "列表页可采（16 篇，含日期与摘要）；正文与历史全量仍受限",
-    "reason": "搜狗微信“文章”检索可用，已按 30 个检索词分批采集到 16 篇标题/日期/摘要；但“账号”检索仍返回 0 个候选，中转链接跳转需过验证码，故拿不到 mp.weixin.qq.com 真实地址，也无 __biz 无法枚举 profile_ext 全量历史。每轮采集会被验证码中途截断，用 --from N 续跑。",
+    "count": 17,
+    "updated": "2026-10-24",
+    "status": "列表页可采（17 篇，含日期与摘要）；正文与历史全量仍受限",
+    "reason": "搜狗微信“文章”检索可用，累计按 30 个检索词分批采到 17 篇标题/日期/摘要；但“账号”检索仍返回 0 个候选，中转链接跳转需过验证码，故拿不到 mp.weixin.qq.com 真实地址，也无 __biz 无法枚举 profile_ext 全量历史。每轮采集会被验证码中途截断，用 --from N 续跑；2026-10-24 一轮 OUT OF 3 批仅补到 1 篇新文。",
     "channels": {
-      "sogou_account": "0 个候选账号（仍不可见）",
-      "sogou_article": "可用，分批采集，验证码会中断",
-      "sogou_link": "CAPTCHA，无法换取原文地址",
-      "profile_ext": "缺 __biz，不可用"
+      "sogou_account": "CAPTCHA",
+      "sogou_article": "CAPTCHA"
     },
     "pass": "3 批（16 词 + 14 词 + 8 词续跑）"
   },
   "articles": [
+    {
+      "account": "千万别写错",
+      "title": "长征胜利90周年宣传工作“规范表述”来了!赶快学习一下,千万别写错",
+      "title_clean": "长征胜利90周年宣传工作“规范表述”来了",
+      "date": "2026-10-22",
+      "summary": "千万别写错今年是中国工农红军长征胜利90周年,特别是10月22... 点击下方关注公众号,了解更多规范表述,告别错别字“中央红军...",
+      "sogou_link": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS-97vPXyxte7ifxWr0bVxkebQdr74GnXE1qXa8Fplpd9FGw1yilO0XJ8bDN4DwCEZCbNCfhm1zyRCCbwgJLM6jUjMlWKNY0R8qm8yq0BqlEQGCGFEaDEqB5OSYQbiBhrn18-cjQjakWfXiW_Y9iA0Q4EIITJkNz2dvGSowT6Vp2irPGb_1yeWajfHzwfItjSZtD0KmYvOedIn2epmEzn1gzRtmyIGw2VAg..&type=2&query=%E5%8D%83%E4%B8%87%E5%88%AB%E5%86%99%E9%94%99 %E8%A7%84%E8%8C%83%E8%A1%A8%E8%BF%B0&token=73F18EA6CFC3052E14124A97297088E41459DE4D6ADB8737",
+      "url": "",
+      "collected": "2026-10-24 00:11:37",
+      "query": "千万别写错 规范表述"
+    },
     {
       "account": "千万别写错",
       "title": "国家机构名称规范表述汇总来了!赶快学习一下,千万别写错",
