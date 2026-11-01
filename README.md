@@ -4,7 +4,7 @@
 
 **先分类、再定位、后统一**。
 
-- **262 条**可机检词库（错别字 / 成语 / 用字 / 专名 / 读音 / 政治提法 / 机构职务 / 标点数字公文 / 新闻业务 / 规范用语）
+- **296 条**可机检词库（错别字 / 成语 / 用字 / 专名 / 读音 / 政治提法 / 机构职务 / 标点数字公文 / 新闻业务 / 规范用语）
 - 五道关口审校 SOP（政治关、名称关、字词关、标点数字关、业务关）
 - 一键初筛脚本，输出可交差的审校单
 - **17 篇**目标号文章清单 + 高校/党政/业界三类情报源清单
@@ -30,9 +30,10 @@ Agent 会在"审校 / 校对 / 查错 / 勘误 / 规范表述"等请求下自动
 
 ```bash
 python scripts/harvest.py            # 采集目标号列表页（验证码会中断，--from N 续跑）
-python scripts/weekly_digest.py      # reports/weekly-YYYY-MM-DD.md
-python scripts/build_articles.py     # references/文章清单.md
+python scripts/ingest_entries.py     # data/inbox.json → 词库（按 right 查重）
 python scripts/build_references.py   # 7 张对照表 + 统计
+python scripts/build_articles.py     # references/文章清单.md
+python scripts/weekly_digest.py      # reports/weekly-YYYY-MM-DD.md
 ```
 
 ## 目录结构
@@ -43,13 +44,13 @@ python scripts/build_references.py   # 7 张对照表 + 统计
 │   ├── SKILL.md                    # 入口：何时用、怎么用、判据
 │   ├── references/
 │   │   ├── 审校SOP.md              # 五道关口逐项清单 + 审校单模板
-│   │   ├── 错别字对照表.md          # 117 条（自动生成）
-│   │   ├── 读音与易错字音.md        # 15 条（自动生成）
-│   │   ├── 政治与提法表述.md        # 46 条（自动生成）
-│   │   ├── 机构名称与职务.md        # 27 条（自动生成）
-│   │   ├── 标点与数字规范.md        # 22 条（自动生成）
-│   │   ├── 新闻业务差错.md          # 17 条（自动生成）
-│   │   ├── 规范用语与禁用表述.md    # 18 条（自动生成）
+│   │   ├── 错别字对照表.md          # 118 条（自动生成）
+│   │   ├── 读音与易错字音.md        # 16 条（自动生成）
+│   │   ├── 政治与提法表述.md        # 57 条（自动生成）
+│   │   ├── 机构名称与职务.md        # 35 条（自动生成）
+│   │   ├── 标点与数字规范.md        # 28 条（自动生成）
+│   │   ├── 新闻业务差错.md          # 23 条（自动生成）
+│   │   ├── 规范用语与禁用表述.md    # 19 条（自动生成）
 │   │   ├── 案例与年度差错.md        # 案例复盘（含 2026-10 通报）+ 年度语文差错
 │   │   ├── 情报源与周更机制.md      # 高校/党政/业界账号清单 + 巡检 SOP
 │   │   ├── 文章清单.md              # 目标号 17 篇（自动生成）
@@ -59,9 +60,11 @@ python scripts/build_references.py   # 7 张对照表 + 统计
 │   ├── articles.json               # 公众号文章元数据
 │   ├── weekly_feed.json            # 每周情报流水账
 │   ├── collect_log.jsonl           # 采集通道日志
+│   ├── inbox.json                  # 待入库候选词条（ingest 后自动清空）
 │   └── 采集说明.md                  # 账号可采集性与限制说明
 ├── scripts/
 │   ├── harvest.py                  # 多通道采集
+│   ├── ingest_entries.py           # 候选词条按 right 查重后入库
 │   ├── check_text.py               # 稿件初筛
 │   ├── build_articles.py           # 文章清单渲染
 │   ├── weekly_digest.py            # 周报生成

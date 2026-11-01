@@ -1,0 +1,7 @@
+{
+  "meta": {
+    "week": "2026-11-01",
+    "note": "本周待入库候选词条，由 scripts/ingest_entries.py 按 right 查重后追加进 lexicon.json。追加后清空 items。"
+  },
+  "items": []
+}
