@@ -5,12 +5,11 @@
     "region": "江苏",
     "positioning": "采编人员培训（规范表述、勘误、编校差错）",
     "count": 17,
-    "updated": "2026-11-01 20:58:41",
+    "updated": "2026-11-06 16:44:32",
     "status": "列表页可采（17 篇，含日期与摘要）；正文与历史全量仍受限",
     "reason": "搜狗微信“文章”检索可用，累计按 30 个检索词分批采到 17 篇标题/日期/摘要；但“账号”检索仍返回 0 个候选，中转链接跳转需过验证码，故拿不到 mp.weixin.qq.com 真实地址，也无 __biz 无法枚举 profile_ext 全量历史。每轮采集会被验证码中途截断，用 --from N 续跑；2026-10-24 一轮 OUT OF 3 批仅补到 1 篇新文。",
     "channels": {
-      "sogou_account": "CAPTCHA",
-      "sogou_article": "CAPTCHA"
+      "sogou_account": "0 个候选账号"
     },
     "pass": "3 批（16 词 + 14 词 + 8 词续跑）"
   },
