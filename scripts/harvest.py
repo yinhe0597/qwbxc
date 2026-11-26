@@ -35,6 +35,8 @@ LOG = os.path.join(DATA, "collect_log.jsonl")
 
 TARGET = "千万别写错"
 BIZ = "qwbxc123"
+# 2026-11-27 经文章页内链接确认的真实 __biz（此前仅知微信号，profile_ext 通道可据此重启）
+REAL_BIZ = "MzY5MDA4ODYzNQ=="
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
 
