@@ -14,14 +14,17 @@ REF_DIR = os.path.join(ROOT, "skills", "qwbxc-caibian-kanwu", "references")
 TYPE_ORDER = ["错别字", "成语", "用字", "专名", "读音", "表述", "政治表述", "机构名称", "职务",
               "标点", "数字", "计量", "新闻业务", "规范用语"]
 
+# 2026-11-27（v0.10.0）起按 id 前缀归档（id 前缀即分类），不再按 type 归档——
+# 修复历史上 10 条 id 前缀与 type 不一致的条目造成"某表条数 ≠ 该前缀总条数"的问题。
+# 每行仍显示该条目的 type 细类。
 FILE_MAP = OrderedDict([
-    ("错别字对照表.md", ["错别字", "成语", "用字", "专名"]),
-    ("读音与易错字音.md", ["读音"]),
-    ("政治与提法表述.md", ["政治表述", "表述"]),
-    ("机构名称与职务.md", ["机构名称", "职务"]),
-    ("标点与数字规范.md", ["标点", "数字", "计量"]),
-    ("新闻业务差错.md", ["新闻业务"]),
-    ("规范用语与禁用表述.md", ["规范用语"]),
+    ("错别字对照表.md", ["A"]),
+    ("读音与易错字音.md", ["G"]),
+    ("政治与提法表述.md", ["B"]),
+    ("机构名称与职务.md", ["C"]),
+    ("标点与数字规范.md", ["D"]),
+    ("新闻业务差错.md", ["E"]),
+    ("规范用语与禁用表述.md", ["F"]),
 ])
 
 HEAD = """<!-- 本文件由 scripts/build_references.py 自动生成，请修改 data/lexicon.json 后重新生成 -->
@@ -48,8 +51,8 @@ def main():
     os.makedirs(REF_DIR, exist_ok=True)
     meta = data["meta"]
     total = 0
-    for fname, types in FILE_MAP.items():
-        rows = [e for e in entries if e.get("type") in types]
+    for fname, prefixes in FILE_MAP.items():
+        rows = [e for e in entries if e["id"][0] in prefixes]
         if not rows:
             continue
         title = fname.replace(".md", "")
